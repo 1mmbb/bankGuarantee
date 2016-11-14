@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nuc.ssm.dao.MbUserDemandMapper">
+  <resultMap id="BaseResultMap" type="cn.edu.nuc.ssm.entity.MbUserDemand">
+    <id column="UDID" jdbcType="INTEGER" property="udid" />
+    <result column="DEID" jdbcType="INTEGER" property="deid" />
+    <result column="USERID" jdbcType="INTEGER" property="userid" />
+    <result column="CONTENT" jdbcType="VARCHAR" property="content" />
+    <result column="DEALTIME" jdbcType="VARCHAR" property="dealtime" />
+    <result column="SCORE" jdbcType="VARCHAR" property="score" />
+    <result column="USERNAME" jdbcType="VARCHAR" property="username" />
+    <result column="ROLENAME" jdbcType="VARCHAR" property="rolename" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    UDID, DEID, USERID, CONTENT, DEALTIME, SCORE
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from mb_user_demand
+    where UDID = #{udid,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectUserDemand" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    SELECT 
+	UDID, DEID, A.USERID, CONTENT, DEALTIME, SCORE,username,rolename
+	FROM mb_user_demand A
+	LEFT OUTER JOIN mb_sysuser B ON A.userid=B.userid
+	LEFT OUTER JOIN mb_sysrole C ON B.roleid=C.roleid
+    where DEID = #{deid,jdbcType=INTEGER}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from mb_user_demand
+    where UDID = #{udid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.edu.nuc.ssm.entity.MbUserDemand">
+    insert into mb_user_demand (UDID, DEID, USERID, 
+      CONTENT, DEALTIME, SCORE
+      )
+    values (#{udid,jdbcType=INTEGER}, #{deid,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER}, 
+      #{content,jdbcType=VARCHAR}, #{dealtime,jdbcType=VARCHAR}, #{score,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.edu.nuc.ssm.entity.MbUserDemand">
+    insert into mb_user_demand
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="udid != null">
+        UDID,
+      </if>
+      <if test="deid != null">
+        DEID,
+      </if>
+      <if test="userid != null">
+        USERID,
+      </if>
+      <if test="content != null">
+        CONTENT,
+      </if>
+      <if test="dealtime != null">
+        DEALTIME,
+      </if>
+      <if test="score != null">
+        SCORE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="udid != null">
+        #{udid,jdbcType=INTEGER},
+      </if>
+      <if test="deid != null">
+        #{deid,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null">
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="dealtime != null">
+        #{dealtime,jdbcType=VARCHAR},
+      </if>
+      <if test="score != null">
+        #{score,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.edu.nuc.ssm.entity.MbUserDemand">
+    update mb_user_demand
+    <set>
+      <if test="deid != null">
+        DEID = #{deid,jdbcType=INTEGER},
+      </if>
+      <if test="userid != null">
+        USERID = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="content != null">
+        CONTENT = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="dealtime != null">
+        DEALTIME = #{dealtime,jdbcType=VARCHAR},
+      </if>
+      <if test="score != null">
+        SCORE = #{score,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where UDID = #{udid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.edu.nuc.ssm.entity.MbUserDemand">
+    update mb_user_demand
+    set DEID = #{deid,jdbcType=INTEGER},
+      USERID = #{userid,jdbcType=INTEGER},
+      CONTENT = #{content,jdbcType=VARCHAR},
+      DEALTIME = #{dealtime,jdbcType=VARCHAR},
+      SCORE = #{score,jdbcType=VARCHAR}
+    where UDID = #{udid,jdbcType=INTEGER}
+  </update>
+</mapper>

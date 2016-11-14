@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nuc.ssm.dao.MbNoticeMapper">
+  <resultMap id="BaseResultMap" type="cn.edu.nuc.ssm.entity.MbNotice">
+    <id column="NITICEID" jdbcType="INTEGER" property="niticeid" />
+    <result column="ROLEID" jdbcType="INTEGER" property="roleid" />
+    <result column="NOTICECON" jdbcType="VARCHAR" property="noticecon" />
+    <result column="NOTICETIME" jdbcType="VARCHAR" property="noticetime" />
+    <result column="ROLENAME" jdbcType="VARCHAR" property="rolename" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    NITICEID, ROLEID, NOTICECON, NOTICETIME
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from mb_notice
+    where NITICEID = #{niticeid,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectAllNotice" resultMap="BaseResultMap">
+    SELECT 
+	NITICEID, A.ROLEID, NOTICECON, NOTICETIME,rolename
+	FROM mb_notice A
+	LEFT OUTER JOIN mb_sysrole B ON A.roleid=B.roleid
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from mb_notice
+    where NITICEID = #{niticeid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.edu.nuc.ssm.entity.MbNotice">
+    insert into mb_notice (NITICEID, ROLEID, NOTICECON, 
+      NOTICETIME)
+    values (#{niticeid,jdbcType=INTEGER}, #{roleid,jdbcType=INTEGER}, #{noticecon,jdbcType=VARCHAR}, 
+      #{noticetime,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.edu.nuc.ssm.entity.MbNotice">
+    insert into mb_notice
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="niticeid != null">
+        NITICEID,
+      </if>
+      <if test="roleid != null">
+        ROLEID,
+      </if>
+      <if test="noticecon != null">
+        NOTICECON,
+      </if>
+      <if test="noticetime != null">
+        NOTICETIME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="niticeid != null">
+        #{niticeid,jdbcType=INTEGER},
+      </if>
+      <if test="roleid != null">
+        #{roleid,jdbcType=INTEGER},
+      </if>
+      <if test="noticecon != null">
+        #{noticecon,jdbcType=VARCHAR},
+      </if>
+      <if test="noticetime != null">
+        #{noticetime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.edu.nuc.ssm.entity.MbNotice">
+    update mb_notice
+    <set>
+      <if test="roleid != null">
+        ROLEID = #{roleid,jdbcType=INTEGER},
+      </if>
+      <if test="noticecon != null">
+        NOTICECON = #{noticecon,jdbcType=VARCHAR},
+      </if>
+      <if test="noticetime != null">
+        NOTICETIME = #{noticetime,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where NITICEID = #{niticeid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.edu.nuc.ssm.entity.MbNotice">
+    update mb_notice
+    set ROLEID = #{roleid,jdbcType=INTEGER},
+      NOTICECON = #{noticecon,jdbcType=VARCHAR},
+      NOTICETIME = #{noticetime,jdbcType=VARCHAR}
+    where NITICEID = #{niticeid,jdbcType=INTEGER}
+  </update>
+</mapper>

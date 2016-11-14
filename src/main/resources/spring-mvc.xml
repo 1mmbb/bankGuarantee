@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+
+	<mvc:annotation-driven>
+	
+		<!-- 防止乱码 -->
+		<mvc:message-converters>
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+	            <property name="supportedMediaTypes">
+	                <list>
+	                    <value>application/json;charset=UTF-8</value>
+	                    <value>text/html;charset=UTF-8</value>
+	                    <value>text/plain;charset=UTF-8</value>
+	                </list>
+	            </property>
+	            <property name="writeAcceptCharset" value="false" />
+	        </bean>
+		</mvc:message-converters>
+	
+	</mvc:annotation-driven>
+	
+	<!-- 静态资源处理 -->
+	<mvc:default-servlet-handler />
+	
+	<context:component-scan base-package="cn.edu.nuc.ssm.controller">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+
+	
+	<mvc:interceptors>
+		<!-- 国际化操作拦截器 如果采用基于（请求/Session/Cookie）则必需配置    --> 
+	    <bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+	    	<property name="paramName" value="lang" />
+	    </bean> 
+	    <mvc:interceptor>
+	    	<mvc:mapping path="/demand/**"/>
+	    	<mvc:mapping path="/function/**"/>
+	    	<mvc:mapping path="/notice/**"/>
+	    	<mvc:mapping path="/role/**"/>
+	    	<mvc:mapping path="/trans/**"/>
+	    	<bean class="cn.edu.nuc.ssm.interceptor.loginInterceptor"></bean> 
+	    </mvc:interceptor> 
+	</mvc:interceptors>
+	
+
+	<!-- 视图解析器 -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+    	<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
+        <property name="prefix" value="/WEB-INF/views/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+    
+	<!-- 上传 -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+    	<property name="resolveLazily" value="true" />
+    	<property name="maxUploadSize" value="20971520" />
+    	<property name="defaultEncoding" value="utf-8" />
+    </bean>
+</beans>

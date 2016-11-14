@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nuc.ssm.dao.MbDemandMapper">
+  <resultMap id="BaseResultMap" type="cn.edu.nuc.ssm.entity.MbDemand">
+    <id column="DEID" jdbcType="INTEGER" property="deid" />
+    <result column="TDID" jdbcType="INTEGER" property="tdid" />
+    <result column="HANDLE_DEPART" jdbcType="VARCHAR" property="handleDepart" />
+    <result column="DEDECLARE" jdbcType="VARCHAR" property="dedeclare" />
+    <result column="DECLARE_NAME" jdbcType="VARCHAR" property="declareName" />
+    <result column="DECLARE_TEL" jdbcType="VARCHAR" property="declareTel" />
+    <result column="DESTATE" jdbcType="INTEGER" property="destate" />
+    <result column="OVER_TIME" jdbcType="VARCHAR" property="overTime" />
+    <result column="REMINDERS" jdbcType="INTEGER" property="reminders" />
+    <result column="REPORT_TIME" jdbcType="VARCHAR" property="reportTime" />
+    <result column="IFSUBMIT" jdbcType="INTEGER" property="ifsubmit" />
+    <result column="IFTRIAL" jdbcType="INTEGER" property="iftrial" />
+    <result column="DEDESCRIPTION" jdbcType="VARCHAR" property="dedescription" />
+    <result column="TTNAME" jdbcType="VARCHAR" property="ttname" />
+    <result column="TDNAME" jdbcType="VARCHAR" property="tdname" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    DEID, TDID, HANDLE_DEPART, DEDECLARE, DECLARE_NAME, DECLARE_TEL, DESTATE, OVER_TIME, 
+    REMINDERS, REPORT_TIME, IFSUBMIT, IFTRIAL, DEDESCRIPTION
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from mb_demand
+    where DEID = #{deid,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectAllDemand" parameterType="cn.edu.nuc.ssm.dto.Statistics" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from mb_demand
+    WHERE REPORT_TIME BETWEEN #{firsttime} AND #{lasttime}
+  </select>
+  
+  <select id="selectDemandByid" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    SELECT 
+	DEID, A.TDID, HANDLE_DEPART, DEDECLARE, DECLARE_NAME, DECLARE_TEL, DESTATE, OVER_TIME, 
+	REMINDERS, REPORT_TIME, IFSUBMIT, IFTRIAL, DEDESCRIPTION,ttname,tdname
+	FROM mb_demand A
+	LEFT OUTER JOIN mb_trans_detail B ON A.TDID=B.TDID
+	LEFT OUTER JOIN mb_trans_type C  ON B.ttid=C.ttid
+	where DEID = #{deid,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectDemandNotOver" resultMap="BaseResultMap">
+    SELECT 
+	DEID, A.TDID, HANDLE_DEPART, DEDECLARE, DECLARE_NAME, DECLARE_TEL, DESTATE, OVER_TIME, 
+	REMINDERS, REPORT_TIME, IFSUBMIT, IFTRIAL, DEDESCRIPTION,ttname,tdname
+	FROM mb_demand A
+	LEFT OUTER JOIN mb_trans_detail B ON A.TDID=B.TDID
+	LEFT OUTER JOIN mb_trans_type C  ON B.ttid=C.ttid
+	WHERE DESTATE !=3
+  </select>
+  
+  <select id="selectDemandOver" resultMap="BaseResultMap">
+    SELECT 
+	DEID, A.TDID, HANDLE_DEPART, DEDECLARE, DECLARE_NAME, DECLARE_TEL, DESTATE, OVER_TIME, 
+	REMINDERS, REPORT_TIME, IFSUBMIT, IFTRIAL, DEDESCRIPTION,ttname,tdname
+	FROM mb_demand A
+	LEFT OUTER JOIN mb_trans_detail B ON A.TDID=B.TDID
+	LEFT OUTER JOIN mb_trans_type C  ON B.ttid=C.ttid
+	WHERE DESTATE =3
+  </select>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from mb_demand
+    where DEID = #{deid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.edu.nuc.ssm.entity.MbDemand">
+    insert into mb_demand (DEID, TDID, HANDLE_DEPART, 
+      DEDECLARE, DECLARE_NAME, DECLARE_TEL, 
+      DESTATE, OVER_TIME, REMINDERS, 
+      REPORT_TIME, IFSUBMIT, IFTRIAL, 
+      DEDESCRIPTION)
+    values (#{deid,jdbcType=INTEGER}, #{tdid,jdbcType=INTEGER}, #{handleDepart,jdbcType=VARCHAR}, 
+      #{dedeclare,jdbcType=VARCHAR}, #{declareName,jdbcType=VARCHAR}, #{declareTel,jdbcType=VARCHAR}, 
+      #{destate,jdbcType=INTEGER}, #{overTime,jdbcType=VARCHAR}, #{reminders,jdbcType=INTEGER}, 
+      #{reportTime,jdbcType=VARCHAR}, #{ifsubmit,jdbcType=INTEGER}, #{iftrial,jdbcType=INTEGER}, 
+      #{dedescription,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.edu.nuc.ssm.entity.MbDemand">
+    insert into mb_demand
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="deid != null">
+        DEID,
+      </if>
+      <if test="tdid != null">
+        TDID,
+      </if>
+      <if test="handleDepart != null">
+        HANDLE_DEPART,
+      </if>
+      <if test="dedeclare != null">
+        DEDECLARE,
+      </if>
+      <if test="declareName != null">
+        DECLARE_NAME,
+      </if>
+      <if test="declareTel != null">
+        DECLARE_TEL,
+      </if>
+      <if test="destate != null">
+        DESTATE,
+      </if>
+      <if test="overTime != null">
+        OVER_TIME,
+      </if>
+      <if test="reminders != null">
+        REMINDERS,
+      </if>
+      <if test="reportTime != null">
+        REPORT_TIME,
+      </if>
+      <if test="ifsubmit != null">
+        IFSUBMIT,
+      </if>
+      <if test="iftrial != null">
+        IFTRIAL,
+      </if>
+      <if test="dedescription != null">
+        DEDESCRIPTION,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="deid != null">
+        #{deid,jdbcType=INTEGER},
+      </if>
+      <if test="tdid != null">
+        #{tdid,jdbcType=INTEGER},
+      </if>
+      <if test="handleDepart != null">
+        #{handleDepart,jdbcType=VARCHAR},
+      </if>
+      <if test="dedeclare != null">
+        #{dedeclare,jdbcType=VARCHAR},
+      </if>
+      <if test="declareName != null">
+        #{declareName,jdbcType=VARCHAR},
+      </if>
+      <if test="declareTel != null">
+        #{declareTel,jdbcType=VARCHAR},
+      </if>
+      <if test="destate != null">
+        #{destate,jdbcType=INTEGER},
+      </if>
+      <if test="overTime != null">
+        #{overTime,jdbcType=VARCHAR},
+      </if>
+      <if test="reminders != null">
+        #{reminders,jdbcType=INTEGER},
+      </if>
+      <if test="reportTime != null">
+        #{reportTime,jdbcType=VARCHAR},
+      </if>
+      <if test="ifsubmit != null">
+        #{ifsubmit,jdbcType=INTEGER},
+      </if>
+      <if test="iftrial != null">
+        #{iftrial,jdbcType=INTEGER},
+      </if>
+      <if test="dedescription != null">
+        #{dedescription,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.edu.nuc.ssm.entity.MbDemand">
+    update mb_demand
+    <set>
+      <if test="tdid != null">
+        TDID = #{tdid,jdbcType=INTEGER},
+      </if>
+      <if test="handleDepart != null">
+        HANDLE_DEPART = #{handleDepart,jdbcType=VARCHAR},
+      </if>
+      <if test="dedeclare != null">
+        DEDECLARE = #{dedeclare,jdbcType=VARCHAR},
+      </if>
+      <if test="declareName != null">
+        DECLARE_NAME = #{declareName,jdbcType=VARCHAR},
+      </if>
+      <if test="declareTel != null">
+        DECLARE_TEL = #{declareTel,jdbcType=VARCHAR},
+      </if>
+      <if test="destate != null">
+        DESTATE = #{destate,jdbcType=INTEGER},
+      </if>
+      <if test="overTime != null">
+        OVER_TIME = #{overTime,jdbcType=VARCHAR},
+      </if>
+      <if test="reminders != null">
+        REMINDERS = #{reminders,jdbcType=INTEGER},
+      </if>
+      <if test="reportTime != null">
+        REPORT_TIME = #{reportTime,jdbcType=VARCHAR},
+      </if>
+      <if test="ifsubmit != null">
+        IFSUBMIT = #{ifsubmit,jdbcType=INTEGER},
+      </if>
+      <if test="iftrial != null">
+        IFTRIAL = #{iftrial,jdbcType=INTEGER},
+      </if>
+      <if test="dedescription != null">
+        DEDESCRIPTION = #{dedescription,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where DEID = #{deid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.edu.nuc.ssm.entity.MbDemand">
+    update mb_demand
+    set TDID = #{tdid,jdbcType=INTEGER},
+      HANDLE_DEPART = #{handleDepart,jdbcType=VARCHAR},
+      DEDECLARE = #{dedeclare,jdbcType=VARCHAR},
+      DECLARE_NAME = #{declareName,jdbcType=VARCHAR},
+      DECLARE_TEL = #{declareTel,jdbcType=VARCHAR},
+      DESTATE = #{destate,jdbcType=INTEGER},
+      OVER_TIME = #{overTime,jdbcType=VARCHAR},
+      REMINDERS = #{reminders,jdbcType=INTEGER},
+      REPORT_TIME = #{reportTime,jdbcType=VARCHAR},
+      IFSUBMIT = #{ifsubmit,jdbcType=INTEGER},
+      IFTRIAL = #{iftrial,jdbcType=INTEGER},
+      DEDESCRIPTION = #{dedescription,jdbcType=VARCHAR}
+    where DEID = #{deid,jdbcType=INTEGER}
+  </update>
+</mapper>

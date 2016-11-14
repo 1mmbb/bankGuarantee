@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nuc.ssm.dao.MbTransTypeMapper">
+  <resultMap id="BaseResultMap" type="cn.edu.nuc.ssm.entity.MbTransType">
+    <id column="TTID" jdbcType="INTEGER" property="ttid" />
+    <result column="TTNAME" jdbcType="VARCHAR" property="ttname" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    TTID, TTNAME
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from mb_trans_type
+    where TTID = #{ttid,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectAllTransType" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from mb_trans_type
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from mb_trans_type
+    where TTID = #{ttid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.edu.nuc.ssm.entity.MbTransType">
+    insert into mb_trans_type (TTID, TTNAME)
+    values (#{ttid,jdbcType=INTEGER}, #{ttname,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.edu.nuc.ssm.entity.MbTransType">
+    insert into mb_trans_type
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="ttid != null">
+        TTID,
+      </if>
+      <if test="ttname != null">
+        TTNAME,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="ttid != null">
+        #{ttid,jdbcType=INTEGER},
+      </if>
+      <if test="ttname != null">
+        #{ttname,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.edu.nuc.ssm.entity.MbTransType">
+    update mb_trans_type
+    <set>
+      <if test="ttname != null">
+        TTNAME = #{ttname,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where TTID = #{ttid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.edu.nuc.ssm.entity.MbTransType">
+    update mb_trans_type
+    set TTNAME = #{ttname,jdbcType=VARCHAR}
+    where TTID = #{ttid,jdbcType=INTEGER}
+  </update>
+</mapper>

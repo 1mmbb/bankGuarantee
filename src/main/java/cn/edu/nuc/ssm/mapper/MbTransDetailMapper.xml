@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.edu.nuc.ssm.dao.MbTransDetailMapper">
+  <resultMap id="BaseResultMap" type="cn.edu.nuc.ssm.entity.MbTransDetail">
+    <id column="TDID" jdbcType="INTEGER" property="tdid" />
+    <result column="TTID" jdbcType="INTEGER" property="ttid" />
+    <result column="TTNAME" jdbcType="VARCHAR" property="ttname" />
+    <result column="TDNAME" jdbcType="VARCHAR" property="tdname" />
+    <result column="TDTYPE" jdbcType="VARCHAR" property="tdtype" />
+    <result column="TDDEPAT" jdbcType="VARCHAR" property="tddepat" />
+    <result column="TDLEVEL" jdbcType="VARCHAR" property="tdlevel" />
+    <result column="TDIFOUT" jdbcType="VARCHAR" property="tdifout" />
+    <result column="FIRST_TIME" jdbcType="VARCHAR" property="firstTime" />
+    <result column="RESPONSE_TIME" jdbcType="VARCHAR" property="responseTime" />
+    <result column="ARRIVE_TIME" jdbcType="VARCHAR" property="arriveTime" />
+    <result column="SERVICE_TIME" jdbcType="VARCHAR" property="serviceTime" />
+    <result column="TDREMARKS" jdbcType="VARCHAR" property="tdremarks" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    TDID, TTID, TDNAME, TDTYPE, TDDEPAT, TDLEVEL, TDIFOUT, FIRST_TIME, RESPONSE_TIME, ARRIVE_TIME, 
+    SERVICE_TIME, TDREMARKS
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from mb_trans_detail
+    where TDID = #{tdid,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectAllTD" parameterType="cn.edu.nuc.ssm.entity.MbTransDetail" resultMap="BaseResultMap">
+    select 
+    A.TDID, A.TTID, TDNAME, TDDEPAT, TDLEVEL, TDIFOUT, FIRST_TIME, RESPONSE_TIME, ARRIVE_TIME, 
+    SERVICE_TIME, TDREMARKS, B.TTNAME
+    from mb_trans_detail A
+    LEFT JOIN mb_trans_type B ON A.TTID=B.TTID
+    <if test="tdname != null">
+    WHERE TDNAME like #{tdname}
+    </if>
+  </select>
+  
+  <select id="selectAllTDPage" resultMap="BaseResultMap">
+    select 
+    A.TDID, A.TTID, TDNAME, TDDEPAT, TDLEVEL, TDIFOUT, FIRST_TIME, RESPONSE_TIME, ARRIVE_TIME, 
+    SERVICE_TIME, TDREMARKS, B.TTNAME
+    from mb_trans_detail A
+    LEFT JOIN mb_trans_type B ON A.TTID=B.TTID
+    <if test="name != null">
+    WHERE TDNAME like #{name}
+    </if>
+    LIMIT #{start},#{offset}
+  </select>
+  
+  <select id="selectTdNameByttid" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  	select 
+    TDID, TTID, TDNAME
+    from mb_trans_detail
+    where ttid = #{ttid}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from mb_trans_detail
+    where TDID = #{tdid,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="cn.edu.nuc.ssm.entity.MbTransDetail">
+    insert into mb_trans_detail (TDID, TTID, TDNAME, 
+      TDDEPAT, TDLEVEL, TDIFOUT, 
+      FIRST_TIME, RESPONSE_TIME, ARRIVE_TIME, 
+      SERVICE_TIME, TDREMARKS,TDTYPE)
+    values (#{tdid,jdbcType=INTEGER}, #{ttid,jdbcType=INTEGER}, #{tdname,jdbcType=VARCHAR}, 
+      #{tddepat,jdbcType=VARCHAR}, #{tdlevel,jdbcType=VARCHAR}, #{tdifout,jdbcType=VARCHAR}, 
+      #{firstTime,jdbcType=VARCHAR}, #{responseTime,jdbcType=VARCHAR}, #{arriveTime,jdbcType=VARCHAR}, 
+      #{serviceTime,jdbcType=VARCHAR}, #{tdremarks,jdbcType=VARCHAR},
+      #{tdtype,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="cn.edu.nuc.ssm.entity.MbTransDetail">
+    insert into mb_trans_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="tdid != null">
+        TDID,
+      </if>
+      <if test="ttid != null">
+        TTID,
+      </if>
+      <if test="tdname != null">
+        TDNAME,
+      </if>
+      <if test="tddepat != null">
+        TDDEPAT,
+      </if>
+      <if test="tdlevel != null">
+        TDLEVEL,
+      </if>
+      <if test="tdifout != null">
+        TDIFOUT,
+      </if>
+      <if test="firstTime != null">
+        FIRST_TIME,
+      </if>
+      <if test="responseTime != null">
+        RESPONSE_TIME,
+      </if>
+      <if test="arriveTime != null">
+        ARRIVE_TIME,
+      </if>
+      <if test="serviceTime != null">
+        SERVICE_TIME,
+      </if>
+      <if test="tdremarks != null">
+        TDREMARKS,
+      </if>
+      <if test="tdtype != null">
+        TDTYPE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="tdid != null">
+        #{tdid,jdbcType=INTEGER},
+      </if>
+      <if test="ttid != null">
+        #{ttid,jdbcType=INTEGER},
+      </if>
+      <if test="tdname != null">
+        #{tdname,jdbcType=VARCHAR},
+      </if>
+      <if test="tddepat != null">
+        #{tddepat,jdbcType=VARCHAR},
+      </if>
+      <if test="tdlevel != null">
+        #{tdlevel,jdbcType=VARCHAR},
+      </if>
+      <if test="tdifout != null">
+        #{tdifout,jdbcType=VARCHAR},
+      </if>
+      <if test="firstTime != null">
+        #{firstTime,jdbcType=VARCHAR},
+      </if>
+      <if test="responseTime != null">
+        #{responseTime,jdbcType=VARCHAR},
+      </if>
+      <if test="arriveTime != null">
+        #{arriveTime,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceTime != null">
+        #{serviceTime,jdbcType=VARCHAR},
+      </if>
+      <if test="tdremarks != null">
+        #{tdremarks,jdbcType=VARCHAR},
+      </if>
+      <if test="tdtype != null">
+        #{tdtype,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.edu.nuc.ssm.entity.MbTransDetail">
+    update mb_trans_detail
+    <set>
+      <if test="ttid != null">
+        TTID = #{ttid,jdbcType=INTEGER},
+      </if>
+      <if test="tdname != null">
+        TDNAME = #{tdname,jdbcType=VARCHAR},
+      </if>
+      <if test="tddepat != null">
+        TDDEPAT = #{tddepat,jdbcType=VARCHAR},
+      </if>
+      <if test="tdlevel != null">
+        TDLEVEL = #{tdlevel,jdbcType=VARCHAR},
+      </if>
+      <if test="tdifout != null">
+        TDIFOUT = #{tdifout,jdbcType=VARCHAR},
+      </if>
+      <if test="firstTime != null">
+        FIRST_TIME = #{firstTime,jdbcType=VARCHAR},
+      </if>
+      <if test="responseTime != null">
+        RESPONSE_TIME = #{responseTime,jdbcType=VARCHAR},
+      </if>
+      <if test="arriveTime != null">
+        ARRIVE_TIME = #{arriveTime,jdbcType=VARCHAR},
+      </if>
+      <if test="serviceTime != null">
+        SERVICE_TIME = #{serviceTime,jdbcType=VARCHAR},
+      </if>
+      <if test="tdremarks != null">
+        TDREMARKS = #{tdremarks,jdbcType=VARCHAR},
+      </if>
+      <if test="tdtype != null">
+        #{tdtype,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where TDID = #{tdid,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.edu.nuc.ssm.entity.MbTransDetail">
+    update mb_trans_detail
+    set TTID = #{ttid,jdbcType=INTEGER},
+      TDNAME = #{tdname,jdbcType=VARCHAR},
+      TDDEPAT = #{tddepat,jdbcType=VARCHAR},
+      TDLEVEL = #{tdlevel,jdbcType=VARCHAR},
+      TDIFOUT = #{tdifout,jdbcType=VARCHAR},
+      FIRST_TIME = #{firstTime,jdbcType=VARCHAR},
+      RESPONSE_TIME = #{responseTime,jdbcType=VARCHAR},
+      ARRIVE_TIME = #{arriveTime,jdbcType=VARCHAR},
+      SERVICE_TIME = #{serviceTime,jdbcType=VARCHAR},
+      TDREMARKS = #{tdremarks,jdbcType=VARCHAR},
+      TDTYPE = #{tdtype,jdbcType=VARCHAR}
+    where TDID = #{tdid,jdbcType=INTEGER}
+  </update>
+</mapper>
